@@ -1,0 +1,3 @@
+- Store secrets in a secure way
+- Set breeze dark as global theme automatically
+- Add minio container for S3 storage

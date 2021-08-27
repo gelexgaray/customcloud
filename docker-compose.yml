@@ -42,5 +42,3 @@ services:
       - MYSQL_HOST=db
       - REDIS_HOST=cache
       - REDIS_HOST_PASSWORD=Ch4ngeMe!
-      # TODO: Store redis.conf password on a secure place
-      # TODO: Test using S3 compatible storage --> Minio: https://hub.docker.com/r/minio/minio/

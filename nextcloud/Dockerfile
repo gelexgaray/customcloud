@@ -1,9 +1,11 @@
 FROM nextcloud:22.1.0-apache
 
 # Add svg support and some extras
-RUN apt-get update && apt-get install -y \
-    nano \
-    libmagickcore-dev 
+RUN apt-get update ; \
+    apt-get install -y \
+      nano \
+      sudo \
+      libmagickcore-dev 
 
 # Copy custom files
 COPY ./customizations /tmp/customizations

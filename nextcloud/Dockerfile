@@ -13,9 +13,9 @@ COPY ./customizations /tmp/customizations
 # Rename entrypoint.sh
 RUN mv /entrypoint.sh /entrypoint.std.sh
 
-# Add custom entrypoint.sh
-COPY ./entrypoint.sh /entrypoint.sh
+# Add custom entrypoint scripts and hooks
+COPY ./*.sh /
 
 # Fix entrypoint.sh permissions
-RUN chown -R www-data:www-data /entrypoint.sh ; \
-    chmod +x /entrypoint.sh  
+RUN chown -R www-data:www-data /*.sh ; \
+    chmod +x /*.sh  

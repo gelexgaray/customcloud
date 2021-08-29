@@ -1,3 +1,6 @@
 FROM redis:6.2.5-alpine
-COPY ./redis.conf /usr/local/etc/redis/redis.conf
-CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+ARG redis_password
+
+RUN \
+  echo "requirepass ${redis_password}" >> /etc/redis.conf
+CMD [ "redis-server", "/etc/redis.conf" ]

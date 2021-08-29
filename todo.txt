@@ -1,2 +1,2 @@
-- Store secrets in a secure way
-- Add minio container for S3 storage
+- Add info about how to customize
+- Add configuration to allow running on kubernetes

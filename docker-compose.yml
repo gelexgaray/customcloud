@@ -45,8 +45,8 @@ services:
       - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
-      - MYSQL_HOST=db
-      - REDIS_HOST=cache
+      - MYSQL_HOST=nextcloud-db
+      - REDIS_HOST=nextcloud-cache
       - REDIS_HOST_PASSWORD=${NEXTCLOUD_CACHE_PASSWORD}
 
   keycloak-db:

@@ -9,16 +9,18 @@ volumes:
 
 services:
   nextcloud-db:
-    image: mariadb:10.6.4
+    image: mariadb:10.6
     restart: always
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-read-only-compressed=OFF
     volumes:
       - nextcloud-db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
-      - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
+      MARIADB_ROOT_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
+      MARIADB_USER: nextcloud
+      MARIADB_DATABASE: nextcloud
+      MARIADB_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${NEXTCLOUD_DB_PASSWORD}" ,"--silent"]
 
   nextcloud-cache:
     build: 
@@ -38,42 +40,41 @@ services:
     volumes:
       - nextcloud:/var/www/html
     environment:
-      - PHP_MEMORY_LIMIT=1024M
-      - NEXTCLOUD_UPDATE=1
-      - NEXTCLOUD_ADMIN_USER=admin
-      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_PASSWORD}
-      - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-      - MYSQL_HOST=nextcloud-db
-      - REDIS_HOST=nextcloud-cache
-      - REDIS_HOST_PASSWORD=${NEXTCLOUD_CACHE_PASSWORD}
+      PHP_MEMORY_LIMIT: 1024M
+      NEXTCLOUD_UPDATE: 1
+      NEXTCLOUD_ADMIN_USER: admin
+      NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_PASSWORD}
+      MYSQL_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_HOST: nextcloud-db
+      REDIS_HOST: nextcloud-cache
+      REDIS_HOST_PASSWORD: ${NEXTCLOUD_CACHE_PASSWORD}
 
   keycloak-db:
-      image: mariadb:latest
-      volumes:
-        - keycloak-db:/var/lib/mysql
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: keycloak
-        MYSQL_USER: keycloak
-        MYSQL_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-      # Copy-pasted from https://github.com/docker-library/mariadb/issues/94
-      healthcheck:
-        test: ["CMD", "mysqladmin", "ping", "--silent"]
+    image: mariadb:10.6
+    volumes:
+      - keycloak-db:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      MARIADB_USER: keycloak
+      MARIADB_DATABASE: keycloak
+      MARIADB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${KEYCLOAK_DB_PASSWORD}" ,"--silent"]
   
   keycloak:
-      image: quay.io/keycloak/keycloak:latest
-      environment:
-        DB_VENDOR: mariadb
-        DB_ADDR: keycloak-db
-        DB_DATABASE: keycloak
-        DB_USER: keycloak
-        DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
-        JGROUPS_DISCOVERY_PROTOCOL: JDBC_PING
-      ports:
-        - 8180:8080
-      depends_on:
-        - keycloak-db
+    image: quay.io/keycloak/keycloak:15.0.2
+    environment:
+      DB_VENDOR: mariadb
+      DB_ADDR: keycloak-db
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      JGROUPS_DISCOVERY_PROTOCOL: JDBC_PING
+    ports:
+      - 8180:8080
+    depends_on:
+      - keycloak-db

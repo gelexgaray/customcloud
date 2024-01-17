@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # Preinstall customizations
-if [ -e "/scripts.custom/preinstall.allways.sh" ]; then
-  echo "Running custom.preinstall.allways.sh ..."
-  /scripts.custom/preinstall.allways.sh
+if [ -e "/scripts.custom/preinstall.always.sh" ]; then
+  echo "Running custom.preinstall.always.sh ..."
+  /scripts.custom/preinstall.always.sh
 fi
 if [ ! -e "/var/www/html/config/CUSTOMIZED" ]; then
   if [ -e "/scripts.custom/preinstall.once.sh" ]; then
     echo "Running custom.preinstall.once.sh ..."
-    /scripts.custom/preinstall.once.sh  
+    /scripts.custom/preinstall.once.sh
   fi
 fi
 
@@ -17,18 +17,10 @@ fi
 # to standard exec
 /entrypoint.std.sh /bin/date
 
-# Copy customizations over nextcloud data volume (ONLY ONCE)
-if [ ! -e "/var/www/html/config/CUSTOMIZED" ]; then
-  echo "Copy customizations over nextcloud data volume"
-  cp -R /customizations/* /var/www/html/
-  chown -R www-data /var/www/html/*
-  chmod 755 /var/www/html/*
-fi
-
 # Post-install customizations
-if [ -e "/scripts.custom/postinstall.allways.sh" ]; then
-  echo "Running custom.postinstall.allways.sh ..."
-  /scripts.custom/postinstall.allways.sh
+if [ -e "/scripts.custom/postinstall.always.sh" ]; then
+  echo "Running custom.postinstall.always.sh ..."
+  /scripts.custom/postinstall.always.sh
 fi
 if [ ! -e "/var/www/html/config/CUSTOMIZED" ]; then
   if [ -e "/scripts.custom/postinstall.once.sh" ]; then

@@ -1,2 +1,2 @@
-- Add info about how to customize
-- Add configuration to allow running on kubernetes
+- Setup scripts (*.sh) to run, located in the folder: /docker-entrypoint-hooks.d/post-installation
+- Setup scripts (*.sh) to run, located in the folder: /docker-entrypoint-hooks.d/before-starting

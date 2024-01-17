@@ -30,7 +30,7 @@ services:
     build: './nextcloud'
     restart: always
     ports:
-      - 8080:80
+      - ${NEXTCLOUD_PORT:-8080}:80
     links:
       - db
       - cache

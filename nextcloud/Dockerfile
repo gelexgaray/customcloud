@@ -1,4 +1,4 @@
-FROM nextcloud:22.1.0-apache
+FROM nextcloud:28-apache
 
 #### STD Layers
 # Customize base image software.

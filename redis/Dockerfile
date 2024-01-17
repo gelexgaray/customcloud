@@ -1,4 +1,4 @@
-FROM redis:6.2.5-alpine
+FROM redis:7-alpine
 ARG redis_password
 
 RUN \

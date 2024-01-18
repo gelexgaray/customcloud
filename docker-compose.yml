@@ -2,12 +2,13 @@
 version: '2'
 
 volumes:
-  nextcloud:
+  data:
   db:
 
 services:
   db:
-    build: './mariadb'
+    image: mariadb:lts 
+    #build: './mariadb'
     restart: always
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-read-only-compressed=OFF
     volumes:
@@ -25,7 +26,6 @@ services:
         redis_password: ${REDIS_PASSWORD}
     restart: always
 
-
   app:
     build: './nextcloud'
     restart: always
@@ -35,7 +35,7 @@ services:
       - db
       - cache
     volumes:
-      - nextcloud:/var/www/html
+      - data:/var/www/html
     environment:
       - PHP_MEMORY_LIMIT=1024M
       - NEXTCLOUD_UPDATE=1

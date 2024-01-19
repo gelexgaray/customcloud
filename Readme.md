@@ -13,7 +13,7 @@ Use example.env as an example. Then, docker-compose up --build to run the server
 
 ```
 $ cp example.env .env
-$ docker-compose up --build
+$ docker-compose up 
 ```
 
 To release resources:
@@ -22,8 +22,3 @@ To release resources:
 $ docker-compose down
 ```
 
-To completelly destroy all the data:
-
-```
-$ docker volume prune
-```

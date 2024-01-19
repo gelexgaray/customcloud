@@ -7,8 +7,7 @@ volumes:
 
 services:
   db:
-    image: mariadb:lts 
-    #build: './mariadb'
+    image: mariadb:lts
     restart: always
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-read-only-compressed=OFF
     volumes:
@@ -20,14 +19,14 @@ services:
       - MYSQL_USER=nextcloud
 
   cache:
-    build: 
-      context: './redis'
-      args:
-        redis_password: ${REDIS_PASSWORD}
+    image: bitnami/redis:7.2
     restart: always
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
 
   app:
-    build: './nextcloud'
+    image: nextcloud:28
+    #build: './nextcloud'
     restart: always
     ports:
       - ${NEXTCLOUD_PORT:-8080}:80
@@ -36,6 +35,8 @@ services:
       - cache
     volumes:
       - data:/var/www/html
+      - ./hooks.d:/docker-entrypoint-hooks.d
+      - ./_shlib:/_shlib
     environment:
       - PHP_MEMORY_LIMIT=1024M
       - NEXTCLOUD_UPDATE=1

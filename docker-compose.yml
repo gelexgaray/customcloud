@@ -1,8 +1,8 @@
 # See https://hub.docker.com/_/nextcloud
-version: '2'
+version: '3.8'
 
 volumes:
-  data:
+  app:
   db:
 
 services:
@@ -33,7 +33,8 @@ services:
       - db
       - cache
     volumes:
-      - data:/var/www/html
+      - app:/var/www/html
+      - ${STORAGE_FOLDER:-./data}:/var/www/html/data
       - ./hooks.d:/docker-entrypoint-hooks.d
       - ./_shlib:/_shlib
     environment:

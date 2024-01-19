@@ -2,8 +2,8 @@
 version: '3.8'
 
 volumes:
-  app:
   db:
+  web:
 
 services:
   db:
@@ -25,16 +25,13 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
   app:
-    image: nextcloud:28
+    image: nextcloud:28-fpm
     restart: always
-    ports:
-      - ${NEXTCLOUD_PORT:-8080}:80
     links:
       - db
       - cache
     volumes:
-      - app:/var/www/html
-      - ${STORAGE_FOLDER:-./data}:/var/www/html/data
+      - ${STORAGE_FOLDER:-./data}:/var/www/html
       - ./hooks.d:/docker-entrypoint-hooks.d
       - ./_shlib:/_shlib
     environment:
@@ -49,3 +46,25 @@ services:
       - MYSQL_HOST=db
       - REDIS_HOST=cache
       - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
+
+  web:
+    image: linuxserver/swag:2.8.0
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - app
+    environment:
+      - PUID=999
+      - PGID=999
+      - TZ=Europe/Madrid
+      - URL=${NEXTCLOUD_DOMAIN}
+      - SUBDOMAINS=
+      - VALIDATION=http
+    volumes:
+      - ${STORAGE_FOLDER:-./data}:/var/www/html:z,ro
+      - web:/config
+      - ./keys:/config/keys
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped

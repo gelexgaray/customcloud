@@ -9,10 +9,10 @@ The code on this repo is public under the terms of the MIT license. Feel free to
 ## Basic usage
 
 Create a .env file in the root folder with the passwords to be used during the provisioning.
-Use example.env as an example. Then, docker-compose up --build to run the server.
+Use sample.env as an example. Then, docker-compose up --build to run the server.
 
 ```
-$ cp example.env .env
+$ cp sample.env .env
 $ docker-compose up 
 ```
 

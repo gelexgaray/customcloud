@@ -8,7 +8,7 @@ volumes:
 services:
   db:
     image: mariadb:lts
-    restart: always
+    restart: unless-stopped
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-read-only-compressed=OFF
     volumes:
       - db:/var/lib/mysql
@@ -20,13 +20,34 @@ services:
 
   cache:
     image: bitnami/redis:7.2
-    restart: always
+    restart: unless-stopped
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
+  web:
+    image: linuxserver/swag:2.8.0
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - app
+    environment:
+      - PUID=999
+      - PGID=999
+      - TZ=Europe/Madrid
+      - URL=${NEXTCLOUD_DOMAIN}
+      - SUBDOMAINS=
+      - VALIDATION=http
+    volumes:
+      - ${STORAGE_FOLDER:-./data}:/var/www/html:z,ro
+      - web:/config
+    ports:
+      - 443:443
+      - 80:80
+
   app:
-    image: nextcloud:28-fpm
-    restart: always
+    image: nextcloud:${NEXTCLOUD_VERSION}-fpm
+    restart: unless-stopped
     links:
       - db
       - cache
@@ -47,24 +68,11 @@ services:
       - REDIS_HOST=cache
       - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
 
-  web:
-    image: linuxserver/swag:2.8.0
-    cap_add:
-      - NET_ADMIN
+  cron:
+    image: nextcloud:${NEXTCLOUD_VERSION}-fpm
+    restart: unless-stopped
+    volumes:
+      - ${STORAGE_FOLDER:-./data}:/var/www/html
+    entrypoint: /cron.sh
     depends_on:
       - app
-    environment:
-      - PUID=999
-      - PGID=999
-      - TZ=Europe/Madrid
-      - URL=${NEXTCLOUD_DOMAIN}
-      - SUBDOMAINS=
-      - VALIDATION=http
-    volumes:
-      - ${STORAGE_FOLDER:-./data}:/var/www/html:z,ro
-      - web:/config
-      - ./keys:/config/keys
-    ports:
-      - 443:443
-      - 80:80
-    restart: unless-stopped

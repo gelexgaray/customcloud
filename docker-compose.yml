@@ -68,6 +68,7 @@ services:
       - MYSQL_HOST=db
       - REDIS_HOST=cache
       - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
+      - DEFAULT_PHONE_REGION=${DEFAULT_PHONE_REGION}
 
   cron:
     image: nextcloud:${NEXTCLOUD_VERSION}-fpm

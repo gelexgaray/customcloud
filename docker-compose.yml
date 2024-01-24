@@ -41,7 +41,7 @@ services:
     volumes:
       - ${STORAGE_FOLDER:-./data}:/var/www/html:z,ro
       - web:/config
-      - ./site-confs:/config/nginx/site-confs
+      - ./web/site-confs:/config/nginx/site-confs
     ports:
       - 443:443
       - 80:80
@@ -54,8 +54,8 @@ services:
       - cache
     volumes:
       - ${STORAGE_FOLDER:-./data}:/var/www/html
-      - ./hooks.d:/docker-entrypoint-hooks.d
-      - ./_shlib:/_shlib
+      - ./app/hooks.d:/docker-entrypoint-hooks.d
+      - ./app/shlib:/_/shlib
     environment:
       - PHP_MEMORY_LIMIT=1024M
       - NEXTCLOUD_UPDATE=1

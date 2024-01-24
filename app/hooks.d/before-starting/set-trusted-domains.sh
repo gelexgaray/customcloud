@@ -1,5 +1,5 @@
 #!/bin/bash
-. /_shlib/occ.sh
+. /_/shlib/occ.sh
 
 if [ ! -z "$NEXTCLOUD_DOMAIN" ];
 then

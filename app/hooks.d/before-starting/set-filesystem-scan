@@ -1,0 +1,8 @@
+#!/bin/bash
+. /_/shlib/occ.sh
+
+
+if [ ! -z "$ENABLE_FILESYSTEM_SCAN" ];
+then
+  occ config:system:set filesystem_check_changes --value=$ENABLE_FILESYSTEM_SCAN
+fi

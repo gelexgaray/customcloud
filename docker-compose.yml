@@ -1,6 +1,4 @@
 # See https://hub.docker.com/_/nextcloud
-version: '3.8'
-
 volumes:
   db:
   web:
@@ -62,6 +60,8 @@ services:
       - ${STORAGE_FOLDER:-./data}:/var/www/html
       - ./app/hooks.d:/docker-entrypoint-hooks.d
       - ./app/shlib:/_/shlib
+      - type: tmpfs
+        target: /tmp:exec
     environment:
       - PHP_MEMORY_LIMIT=1024M
       - NEXTCLOUD_UPDATE=1

@@ -1,3 +1,0 @@
-- Fix: log viewer not working
-- Set default phone prefix on start
-

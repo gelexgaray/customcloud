@@ -25,7 +25,7 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
   web:
-    image: linuxserver/swag:2.8.0
+    image: linuxserver/swag:2.11.0
     restart: unless-stopped
     cap_add:
       - NET_ADMIN

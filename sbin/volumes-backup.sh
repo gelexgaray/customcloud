@@ -22,7 +22,7 @@ mkdir "$BACKUP_FOLDER/$DATE" 2> /dev/null
 docker compose down
 
 # Loop through volumes a backup each of them
-VOLUMES=$( docker volume ls --format "{{lower .Name}}" | grep "$BASENAME" )
+VOLUMES=$( docker volume ls --format "{{lower .Name}}" | grep "$BASENAME_" )
 for VOLUME in $VOLUMES;
 do
   echo "Backing up [$VOLUME]..."

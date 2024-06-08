@@ -15,8 +15,6 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
-    ports:
-      - 3306:3306
 
   cache:
     image: bitnami/redis:7.2
@@ -43,8 +41,8 @@ services:
       - web:/config
       - ./web/site-confs:/config/nginx/site-confs
     ports:
-      - 443:443
-      - 80:80
+      - ${HTTPS_PORT:-443}:443
+      - ${HTTP_PORT:-80}:80
 
   app:
     #image: nextcloud:${NEXTCLOUD_VERSION}-fpm

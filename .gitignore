@@ -1,4 +1,5 @@
 .env
 data/*
 backup/*
+sbin/local/*
 site-confs/*.sample

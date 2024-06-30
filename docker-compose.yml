@@ -45,7 +45,6 @@ services:
       - ${HTTP_PORT:-80}:80
 
   app:
-    #image: nextcloud:${NEXTCLOUD_VERSION}-fpm
     build:
       context: ./app/image
       args:
@@ -76,7 +75,10 @@ services:
       - ENABLE_FILESYSTEM_SCAN=${ENABLE_FILESYSTEM_SCAN:-1}
 
   cron:
-    image: nextcloud:${NEXTCLOUD_VERSION}-fpm
+    build:
+      context: ./app/image
+      args:
+        NEXTCLOUD_VERSION: ${NEXTCLOUD_VERSION}
     restart: unless-stopped
     volumes:
       - ${STORAGE_FOLDER:-./data}:/var/www/html

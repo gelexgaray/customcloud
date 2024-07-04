@@ -35,7 +35,9 @@ services:
       - TZ=Europe/Madrid
       - URL=${NEXTCLOUD_DOMAIN}
       - SUBDOMAINS=
-      - VALIDATION=http
+      - VALIDATION=${CERTBOT_VALIDATION:-http}
+      - DNSPLUGIN=${CERTBOT_DNSPLUGIN:-}
+      - DUCKDNSTOKEN=${CERTBOT_DUCKDNSTOKEN}
     volumes:
       - ${STORAGE_FOLDER:-./data}:/var/www/html:z,ro
       - web:/config

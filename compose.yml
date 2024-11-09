@@ -17,7 +17,7 @@ services:
       - MYSQL_USER=nextcloud
 
   cache:
-    image: bitnami/redis:7.2
+    image: bitnami/redis:7.4
     restart: unless-stopped
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
